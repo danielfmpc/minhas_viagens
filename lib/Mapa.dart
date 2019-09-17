@@ -9,13 +9,31 @@ class AbrirMapa extends StatefulWidget {
 
 class _AbrirMapaState extends State<AbrirMapa> {
   Completer<GoogleMapController> _controller = Completer();
+  Set<Marker> _marcadores = {};
 
   _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
 
   _exibirMarcador( LatLng latLng){
-    
+//    Set<Marker> marcadoresLocal = {};
+    Marker marcadoEscolhido = Marker(
+      markerId: MarkerId("marcador-${latLng.latitude} - ${latLng.longitude}"),
+      position: LatLng(latLng.latitude, latLng.longitude),
+      infoWindow: InfoWindow(
+        title: "Marcado",
+      ),
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueRed
+      ),
+    );
+    // Mostra apenas um marcador
+//    marcadoresLocal.add(marcadoEscolhido);
+    setState(() {
+//      _marcadores = marcadoresLocal;
+      _marcadores.add(marcadoEscolhido);
+
+    });
   }
 
   @override
@@ -33,6 +51,7 @@ class _AbrirMapaState extends State<AbrirMapa> {
           ),
           onMapCreated: _onMapCreated,
           onLongPress: _exibirMarcador,
+          markers: _marcadores,
         ),
       ),
     );
